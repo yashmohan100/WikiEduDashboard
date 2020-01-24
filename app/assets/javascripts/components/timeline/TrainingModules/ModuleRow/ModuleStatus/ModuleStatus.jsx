@@ -16,8 +16,11 @@ import {
   fetchTrainingModuleExercisesByUser
 } from '~/app/assets/javascripts/actions/exercises_actions';
 
+// Selectors
+import { getCurrentUser } from '~/app/assets/javascripts/selectors';
+
 export const ModuleStatus = ({
-  block_id, course, deadline_status, due_date, flags, kind, module_progress, progressClass, slug,
+  course, currentUser, deadline_status, due_date, flags, kind, module_progress, progressClass, slug,
   complete, fetchExercises, incomplete
 }) => {
   const isTrainingModule = kind === TRAINING_MODULE_KIND;
@@ -29,12 +32,12 @@ export const ModuleStatus = ({
   if (isTrainingModule || isExercise) {
     const button = (
       <ExerciseButton
-        block_id={block_id}
         course={course}
+        currentUser={currentUser}
         flags={flags}
         isComplete={isComplete}
         isExercise={isExercise}
-        slug={slug}
+        moduleSlug={slug}
         complete={complete}
         fetchExercises={fetchExercises}
         incomplete={incomplete}
@@ -53,10 +56,10 @@ export const ModuleStatus = ({
 };
 
 ModuleStatus.propTypes = {
-  block_id: PropTypes.number.isRequired,
   course: PropTypes.shape({
     id: PropTypes.number.isRequired
   }).isRequired,
+  currentUser: PropTypes.object.isRequired,
   deadline_status: PropTypes.string,
   due_date: PropTypes.string.isRequired,
   flags: PropTypes.object,
@@ -64,15 +67,16 @@ ModuleStatus.propTypes = {
     DISCUSSION_KIND, EXERCISE_KIND, TRAINING_MODULE_KIND
   ]),
   module_progress: PropTypes.string,
-  progressClass: PropTypes.string.isRequired,
   slug: PropTypes.string.isRequired,
+  progressClass: PropTypes.string.isRequired,
 
   complete: PropTypes.func.isRequired,
   incomplete: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
-  course: state.course
+  course: state.course,
+  currentUser: getCurrentUser(state)
 });
 
 const mapDispatchToProps = {

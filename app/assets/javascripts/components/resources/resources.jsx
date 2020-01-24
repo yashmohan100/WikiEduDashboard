@@ -9,8 +9,6 @@ import Handouts from './handouts';
 import Templates from './templates';
 import { BLOCK_KIND_RESOURCES } from '../../constants/timeline';
 
-const flattenAndCompact = _.flow([_.flatten, _.compact]);
-
 const moduleByExercises = (modules) => {
   const orderedSteps = [
     'Complete your Bibliography',
@@ -63,14 +61,16 @@ const moduleByExercises = (modules) => {
   });
 };
 
-const Resources = ({ weeks, current_user, course }) => {
+const Resources = ({ weeks, current_user, course, trainingStatus }) => {
+  if (trainingStatus.loading) return null;
+
   const trainingLibrarySlug = course.training_library_slug;
   let instructorModulesLink;
   if (current_user.isInstructor && Features.wikiEd) {
     instructorModulesLink = <a href={'/training/instructors'} className="button pull-right">Instructor orientation modules</a>;
   }
   const blocks = _.flatten(weeks.map(week => week.blocks));
-  const modules = flattenAndCompact(blocks.map(block => block.training_modules));
+  const modules = trainingStatus[current_user.id];
 
   let additionalResources;
   const additionalResourcesBlocks = blocks.filter(block => block.kind === BLOCK_KIND_RESOURCES);
@@ -127,7 +127,8 @@ const Resources = ({ weeks, current_user, course }) => {
 };
 
 const mapStateToProps = state => ({
-  weeks: getWeeksArray(state)
+  weeks: getWeeksArray(state),
+  trainingStatus: state.trainingStatus
 });
 
 export default connect(mapStateToProps)(Resources);

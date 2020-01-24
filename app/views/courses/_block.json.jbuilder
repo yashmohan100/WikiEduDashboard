@@ -13,7 +13,8 @@ if block.training_modules.any?
       training_module: tm,
       user: current_user
     )
-    json.call(tm, :slug, :id, :name, :kind)
+    json.call(tm, :slug, :id, :kind)
+    json.module_name tm.name
     json.module_progress due_date_manager.module_progress
     json.due_date due_date_manager.computed_due_date.strftime('%Y/%m/%d')
     json.overdue due_date_manager.overdue?

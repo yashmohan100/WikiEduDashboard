@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 export const ExerciseButton = ({
-  block_id, course, flags, isComplete, isExercise, slug,
+  course, currentUser, flags, isComplete, isExercise, moduleSlug,
   complete, fetchExercises, incomplete
 }) => {
   let button = (
@@ -13,14 +13,14 @@ export const ExerciseButton = ({
 
   if (isComplete && isExercise) {
     if (flags.marked_complete) {
-      const onClick = () => incomplete(block_id, slug).then(() => fetchExercises(course.id));
+      const onClick = () => incomplete(course.id, moduleSlug, currentUser.id).then(() => fetchExercises(course.id));
       button = (
         <button className="button small left" onClick={onClick}>
           Mark Incomplete
         </button>
       );
     } else {
-      const onClick = () => complete(block_id, slug).then(() => fetchExercises(course.id));
+      const onClick = () => complete(course.id, moduleSlug, currentUser.id).then(() => fetchExercises(course.id));
       button = (
         <button className="button small left dark" onClick={onClick}>
           Mark Complete
@@ -33,8 +33,10 @@ export const ExerciseButton = ({
 };
 
 ExerciseButton.propTypes = {
-  block_id: PropTypes.number.isRequired,
   course: PropTypes.shape({
+    id: PropTypes.number.isRequired
+  }).isRequired,
+  currentUser: PropTypes.shape({
     id: PropTypes.number.isRequired
   }).isRequired,
   flags: PropTypes.shape({
@@ -42,7 +44,7 @@ ExerciseButton.propTypes = {
   }),
   isComplete: PropTypes.bool.isRequired,
   isExercise: PropTypes.bool.isRequired,
-  slug: PropTypes.string.isRequired,
+  moduleSlug: PropTypes.string.isRequired,
 
   complete: PropTypes.func.isRequired,
   incomplete: PropTypes.func.isRequired,

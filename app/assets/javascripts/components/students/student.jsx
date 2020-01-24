@@ -37,7 +37,7 @@ const Student = createReactClass({
   openDrawer() {
     if (!this.props.isOpen) {
       this.props.fetchUserRevisions(this.props.course.id, this.props.student.id);
-      this.props.fetchTrainingStatus(this.props.student.id, this.props.course.id);
+      this.props.fetchTrainingStatus(this.props.student.id, this.props.course.slug);
     }
     return this.props.toggleDrawer(`drawer_${this.props.student.id}`);
   },

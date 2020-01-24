@@ -17,6 +17,9 @@ import RocketChat from '../common/rocket_chat.jsx';
 import ArticleFinder from '../article_finder/article_finder.jsx';
 
 import Confirm from '../common/confirm.jsx';
+import {
+  fetchTrainingStatus
+} from '~/app/assets/javascripts/actions/training_status_actions';
 import { fetchUsers } from '../../actions/user_actions.js';
 import { fetchCampaigns } from '../../actions/campaign_actions.js';
 import { fetchCourse, updateCourse, persistCourse, dismissNotification } from '../../actions/course_actions';
@@ -46,9 +49,11 @@ export const Course = createReactClass({
   // Fetch all the data needed to render a course page
   componentDidMount() {
     const courseSlug = this.getCourseSlug();
+
     this.props.fetchCourse(courseSlug);
     this.props.fetchUsers(courseSlug);
     this.props.fetchTimeline(courseSlug);
+    this.props.fetchTrainingStatus(this.props.currentUser.id, courseSlug);
     return this.props.fetchCampaigns(courseSlug);
   },
 
@@ -162,6 +167,7 @@ const mapDispatchToProps = {
   fetchUsers,
   fetchCampaigns,
   fetchCourse,
+  fetchTrainingStatus,
   fetchTimeline,
   updateCourse,
   persistCourse,

@@ -6,21 +6,33 @@ import { connect } from 'react-redux';
 import UpcomingExercise from '../components/UpcomingExercise.jsx';
 import Header from '../components/Header.jsx';
 
-// Actions
-import {
-  fetchTrainingModuleExercisesByUser
-} from '~/app/assets/javascripts/actions/exercises_actions';
-
 export class MyExercisesContainer extends React.Component {
-  componentDidMount() {
-    return this.props.fetchTrainingModuleExercisesByUser(this.props.course.id);
+  _categorize(kind, trainings) {
+    return trainings.reduce((acc, training) => {
+      if (training.kind !== kind) return acc;
+
+      const isComplete = training.deadline_status === 'complete';
+      const flags = training.flags || {};
+      if (isComplete && flags.marked_complete) {
+        acc.complete.push(training);
+      } else if (isComplete) {
+        acc.incomplete.push(training);
+      } else {
+        acc.unread.push(training);
+      }
+
+      return acc;
+    }, { complete: [], incomplete: [], unread: [] });
   }
 
   render() {
-    const { course, exercises, trainingLibrarySlug } = this.props;
-    const incomplete = exercises.incomplete.concat(exercises.unread);
+    const { course, kind, trainingStatus, trainingLibrarySlug, user } = this.props;
+    if (!trainingStatus[user.id]) return null;
+    const modules = this._categorize(kind, trainingStatus[user.id]);
+    const incomplete = modules.incomplete.concat(modules.unread);
+
     if (!incomplete.length) return null;
-    if (exercises.loading) {
+    if (modules.loading) {
       return (
         <div className="module my-exercises">
           <h3>Loading...</h3>
@@ -50,15 +62,11 @@ export class MyExercisesContainer extends React.Component {
 }
 
 MyExercisesContainer.propTypes = {
-  exercises: PropTypes.object.isRequired,
   course: PropTypes.object.isRequired,
   trainingLibrarySlug: PropTypes.string.isRequired
 };
 
-const mapStateToProps = ({ course, exercises }) => ({ course, exercises });
-
-const mapDispatchToProps = {
-  fetchTrainingModuleExercisesByUser
-};
+const mapStateToProps = ({ course, trainingStatus }) => ({ course, trainingStatus });
+const mapDispatchToProps = null;
 
 export default connect(mapStateToProps, mapDispatchToProps)(MyExercisesContainer);

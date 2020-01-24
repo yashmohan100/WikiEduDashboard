@@ -1,8 +1,8 @@
 import _ from 'lodash';
 import {
-  RECEIVE_TRAINING_MODULE, MENU_TOGGLE, SET_SELECTED_ANSWER,
+  RECEIVE_TRAINING_MODULE, RECEIVE_TRAINING_STATUS, MENU_TOGGLE, SET_SELECTED_ANSWER,
   SET_CURRENT_SLIDE, RECEIVE_ALL_TRAINING_MODULES,
-  EXERCISE_COMPLETION_UPDATE, SLIDE_COMPLETED, API_FAIL
+  SLIDE_COMPLETED, API_FAIL
 } from '../constants';
 import request from '../utils/request';
 import logErrorMessage from '../utils/log_error_message';
@@ -85,12 +85,12 @@ export const setSlideCompleted = opts => (dispatch, getState) => {
     .catch(resp => dispatch({ type: API_FAIL, data: resp }));
 };
 
-const setExerciseModule = (complete = true) => (block_id, module_id) => (dispatch) => {
-  return request('/training_modules_users/exercise.json', {
-    body: JSON.stringify({ block_id, complete, module_id }),
+const setExerciseModule = (complete = true) => (course_id, module_id, userId) => (dispatch) => {
+  return request('/training_status/exercise.json', {
+    body: JSON.stringify({ complete, course_id, module_id }),
     method: 'POST'
   }).then(resp => resp.json())
-    .then(resp => dispatch({ type: EXERCISE_COMPLETION_UPDATE, data: resp }))
+    .then(resp => dispatch({ type: RECEIVE_TRAINING_STATUS, data: resp, userId }))
     .catch(resp => dispatch({ type: API_FAIL, data: resp }));
 };
 

@@ -24,6 +24,11 @@ import { fetchTags } from '../../actions/tag_actions';
 import { setValid, setInvalid, activateValidations } from '../../actions/validation_actions';
 import { getStudentUsers, getWeeksArray, firstValidationErrorMessage, isValid } from '../../selectors';
 
+import {
+  EXERCISE_KIND,
+  TRAINING_MODULE_KIND
+} from '~/app/assets/javascripts/constants';
+
 const Overview = createReactClass({
   displayName: 'Overview',
 
@@ -119,7 +124,16 @@ const Overview = createReactClass({
     if (this.props.current_user.isStudent && course.id) {
       userArticles = (
         <>
-          <MyExercises trainingLibrarySlug={this.props.course.training_library_slug} />
+          <MyExercises
+            kind={TRAINING_MODULE_KIND}
+            user={this.props.current_user}
+            trainingLibrarySlug={this.props.course.training_library_slug}
+          />
+          <MyExercises
+            kind={EXERCISE_KIND}
+            user={this.props.current_user}
+            trainingLibrarySlug={this.props.course.training_library_slug}
+          />
           <MyArticles
             course={course}
             course_id={this.props.course_id}
