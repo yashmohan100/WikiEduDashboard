@@ -40,7 +40,7 @@ export class StudentDrawer extends React.Component {
                 course={course}
                 revisions={revisions}
                 selectedIndex={this.state.selectedIndex}
-                showDiff={this.showDiff}
+                showDiff={this.showDiff.bind(this)}
                 student={student}
                 wikidataLabels={wikidataLabels}
               />
