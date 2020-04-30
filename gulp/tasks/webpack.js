@@ -52,6 +52,36 @@ function startWebpack(cb) {
   }));
 
   const outputPath = doHot ? path.resolve(appRoot, `${config.outputPath}/${config.jsDirectory}`) : path.resolve(`${config.outputPath}/${config.jsDirectory}`);
+
+  // Always use babel-loader
+  const moduleRules = [
+    {
+      test: /\.jsx?$/,
+      exclude: [/vendor/, /node_modules(?!\/striptags)/],
+      use: {
+        loader: 'babel-loader',
+        query: {
+          cacheDirectory: true
+        }
+      },
+    }
+  ];
+  // Also use istanbul-instrumenter-loader in the test environment
+  if (config.development) {
+    console.log('adding istanbul instrumentation!');
+    moduleRules.push({
+      test: /\.js/,
+      exclude: [/node_modules/],
+      enforce: 'post',
+      use: {
+        loader: 'istanbul-instrumenter-loader',
+        options: {
+          esModules: true
+        }
+      }
+    });
+  }
+
   const wpConf = {
     mode,
     entry: entries,
@@ -64,18 +94,7 @@ function startWebpack(cb) {
       extensions: ['.js', '.jsx'],
     },
     module: {
-      rules: [
-        {
-          test: /\.jsx?$/,
-          exclude: [/vendor/, /node_modules(?!\/striptags)/],
-          use: {
-            loader: 'babel-loader',
-            query: {
-              cacheDirectory: true
-            }
-          }
-        }
-      ]
+      rules: moduleRules
     },
     externals: {
       jquery: 'jQuery',

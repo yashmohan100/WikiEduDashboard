@@ -89,6 +89,11 @@ RSpec.configure do |config|
     warn errors
   end
 
+  # collect JavaScript coverage from each test
+  config.after(:each, type: :feature) do
+    dump_js_coverage
+  end
+
   # fail on javascript errors in feature specs
   config.after(:each, type: :feature, js: true) do |example|
     # `Capybara.reset_sessions!` here would ensure that any error
@@ -158,4 +163,14 @@ def pass_pending_spec
     print 'P'
   end
   raise 'this test passed — this time'
+end
+
+COVERAGE_REPORT_DIR = 'e2e_coverage'
+def dump_js_coverage
+  page_coverage = page.evaluate_script('JSON.stringify(window.__coverage__);')
+  return if page_coverage.blank?
+
+  File.open(Rails.root.join(COVERAGE_REPORT_DIR, "system_test_#{Time.current.to_i}.json"), 'w') do |report|
+    report.puts page_coverage
+  end
 end
