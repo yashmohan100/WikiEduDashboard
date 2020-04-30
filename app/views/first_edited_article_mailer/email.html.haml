@@ -1,0 +1,46 @@
+%link{rel: 'stylesheet', href:'/mailer.css'}
+%table.row
+  %tbody
+    %tr
+      %th
+        %table
+          %tr
+            %td.main-content
+              %h1.headline
+                = "#{@course.title}: Use the Dashboard to keep track of students' progress"
+              %p.paragraph
+                = "Hi #{@greeted_users}."
+              %p.paragraph
+                The Wiki Education Dashboard has started to pick up edits to live Wikipedia articles
+                from your students. For example,
+                = @example_editor.username
+                has edited the article
+                = "\"#{@example_article.full_title}\"."
+              %p.paragraph
+                The Students tab of your course page can help you keep track of what each student has
+                done so far.
+        %table
+          %tr
+            %td.main-content.link-cell
+              %a.button_link{:href => @students_link}
+                = @course.title + " Students Overview"
+            %td.expander
+        %table
+          %tr
+            %td.main-content
+              %p.paragraph
+                Click on
+                %a.link{href: @student_details_link} one of the students
+                to see details about their assigned articles, the training modules
+                they've completed, other articles they've edited, and recent edits they've made. As students begin making
+                bigger changes to articles, the Article Viewer tool can be especially helpful; it shows you the current
+                state of an edited article, and it will load authorship data to highlight which text was added by
+                the students.
+        %table
+          %tr
+            %td.main-content
+              %p.paragraph
+                Best regards,
+                %br
+                %em
+                  The Wiki Education team

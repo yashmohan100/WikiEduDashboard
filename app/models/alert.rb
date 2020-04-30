@@ -42,6 +42,7 @@ class Alert < ApplicationRecord
     DiscretionarySanctionsAssignmentAlert
     DiscretionarySanctionsEditAlert
     DYKNominationAlert
+    FirstEditedArticleAlert
     FirstEnrolledStudentAlert
     GANominationAlert
     HighQualityArticleAssignmentAlert
@@ -81,6 +82,8 @@ class Alert < ApplicationRecord
     DiscretionarySanctionsAssignmentAlert
     DiscretionarySanctionsEditAlert
     DYKNominationAlert
+    FirstEditedArticleAlert
+    FirstEnrolledStudentAlert
     GANominationAlert
     HighQualityArticleAssignmentAlert
     HighQualityArticleEditAlert

@@ -75,6 +75,10 @@ class ArticlesCourses < ApplicationRecord
     save
   end
 
+  def editors
+    @users ||= User.where(id: user_ids)
+  end
+
   def views_since_earliest_revision(revisions)
     return if revisions.empty?
     return if article.average_views.nil?
