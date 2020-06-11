@@ -12,7 +12,7 @@ const WikidataItemInput = (props) => {
   };
 
   return (
-    <form className="training__slide__content" onSubmit={onSubmit}>
+    <form onSubmit={onSubmit}>
       <input
         className="training-text-input"
         placeholder={I18n.t('wikidata.item_input')}

@@ -9,6 +9,7 @@ import SlideLink from './slide_link.jsx';
 import SlideMenu from './slide_menu.jsx';
 import Quiz from './quiz.jsx';
 import WikidataItemInput from './interactives/wikidata_item_input';
+import WikidataItemInfo from './interactives/wikidata_item_info.jsx';
 import Notifications from '../../components/common/notifications.jsx';
 
 const md = require('../../utils/markdown_it.js').default({ openLinksExternally: true });
@@ -213,7 +214,12 @@ const TrainingSlideHandler = createReactClass({
     const hasInterative = true;
     let interactive;
     if (hasInterative) {
-      interactive = <WikidataItemInput />;
+      interactive = (
+        <div id="wikidata_interactive" className="training__slide__content">
+          <WikidataItemInput />
+          <WikidataItemInfo />
+        </div>
+      );
     }
 
 
