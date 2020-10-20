@@ -10,7 +10,7 @@ class CourseWikidataCsvBuilder
 
   def generate_csv
     csv_data = [CSV_HEADERS]
-    csv_data << ['total wikidata revisions', wikidata_revisions.count]
+    csv_data << ['total mainspace wikidata revisions', wikidata_revisions.count]
     wikidata_stats.each do |revision_type, count|
       csv_data << [revision_type, count]
     end
@@ -29,7 +29,7 @@ class CourseWikidataCsvBuilder
   end
 
   def wikidata_revisions
-    @course.revisions.where(wiki: wikidata_wiki)
+    @course.revisions.where(wiki: wikidata_wiki).mainspace
   end
 
   def wikidata_stats
